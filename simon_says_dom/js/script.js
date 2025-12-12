@@ -7,8 +7,13 @@ Dopo 30 secondi i numeri scompaiono e appaiono invece 5 input in cui l'utente de
 
 //creo un generatore casuale di 5 numeri con array 
 
+//li faccio visualizzare in pagina
+//mi prendo la ul dove inserire i miei numeri
+const numberList = document.getElementById('numbers-list');
+//aggiungo i numeri 
+const randomListNumbers = getArrRandomNum(1, 50, 5);
+numberList.innerText = randomListNumbers;
 
-console.log(getArrRandomNum(1, 50, 5));
 
 
 //funzione per creare un array di tot num 
