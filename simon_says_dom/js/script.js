@@ -26,7 +26,7 @@ function getArrRandomNum (minNUm, maxNUm, tot){
    while (numArr.length < tot) {
        const randomNum = genRandomNumInRange(minNUm, maxNUm);
         //metto un if per dare univocità ai miei numeri randomi 
-        if(!numArr.includes(randomNum)){  //quindi gli sto dicendo che se il mio random Num non è incluso (!not) allora può pushare
+        if(!numArr.includes(randomNum)){  //quindi gli sto dicendo che lo aggiunge solo se non è già presente nell'Array e quindi non me lo scrive due volte
             numArr.push(randomNum);
         } 
 
@@ -41,25 +41,67 @@ function genRandomNumInRange(min,max ){
 }
 
 
-
-
-
-
-
-
+//----- COUNTDOWN SECTION -----
 //genero un countdown di 30 secondi
-//seleziono l'elemento di output
+
+//richiamo l'elemento di output
+const timerOutput = document.getElementById('countdown');
+//mi richiamo anche la scritta che poi vado a eliminare 
+const instParagraph = document.getElementById('instructions');
+//richiamo il form per mettergli il display una volta finito il countdown 
+const answersForm = document.getElementById('answers-form')
 //inserisco una variabile di inizio conteggio
+let seconds = 30;
 
 //ogni secondo mi toglie un'unità (10,9,8 ecc)
-//inserisco output con i secondi aggiornati 
+//inserisco output con i secondi aggiornati
+timerOutput.innerText = seconds; 
+
 //gestisco l'aggiornamento dell'output
-//SE il countdoun finisce allora  
-//tolgo il display alla frase "Memorizza i numeri entro il tempo limite"
-    //richiamo in pagina il form che fino a questo punto non era visibile
+const time =setInterval( () =>{
+    //SE il countdoun finisce allora  
+    if(seconds === 0){
+
+        //fermo il timer
+        clearInterval(time);
+        
+        //tolgo il display alla frase "Memorizza i numeri entro il tempo limite"
+        instParagraph.classList.add('d-none');
+        //tolgo il display anche ai numeri 
+        numberList.classList.add('d-none');
+        //metto il display al form
+        answersForm.classList.remove('d-none');
+}   else{
+    //decremento seconds 
+    seconds = seconds -1 
+    timerOutput.innerText = seconds;
+}
+
+}, 100)
 
 
     //all'invio del form il risultato mi dice quanti numeri ho azzeccato 
+    //creo un evento che al submit mi dice quanti numeri ha indovinato l'utente 
+
+    answersForm.addEventListener("submit", (e) =>{
+        e.preventDefault();
+
+        //creo una variabile per i numeri azzeccati con array
+        let numArrGuess = [];
+        let userNums = document.querySelectorAll("#input-group input");
+        //creo il messaggio 
+        let finalMessage = document.getElementById('message');
+
+        //creo il ciclo finale su tutti gli input inseriti dall'utente
+
+        for (let i = 0; i < userNums.length; i++){
+            let numUser = parseInt(userNums[i].value);
+            if(randomListNumbers.includes(numUser) && !numArrGuess.includes(numUser)){
+                numArrGuess.push(numUser);
+            }
+        }
+        finalMessage.innerText = `Bene! Hai indovinato ${numArrGuess.length} numeri! ${numArrGuess.join(", ")}`
+    });
 
 
 
